@@ -11,8 +11,7 @@ function Jobs() {
   const navigate = useNavigate();
 
   const datas = useSelector((state) => state.jobs);
-  console.log('datas');
-  console.log(datas);
+
   const [page, setPage] = useState(1);
   const [desc, setDesc] = useState('');
   const [location, setLocation] = useState('');
@@ -46,8 +45,6 @@ function Jobs() {
         },
       })
       .then((res) => {
-        console.log('res load more');
-        console.log(res);
         if (res.status === 200) {
           setDatalIsLimit(true);
           let _temp = [];
