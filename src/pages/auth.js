@@ -61,9 +61,11 @@ function Auth(props) {
     <div className="w-full h-screen flex justify-center items-center">
       <div className="w-1/3 bg-white rounded-lg shadow-lg p-5 text-center">
         <p className="text-lg py-4 font-bold text-sky-600 text-center">Github job Frontend test</p>
-        {types.includes('GMAIL') ? showGmail() : null}
+        <div className="grid grid-cols-1 w-2/3 m-auto leading-4">
+          {types.includes('GMAIL') ? showGmail() : null}
 
-        {types.includes('FACEBOOK') ? showFB() : null}
+          {types.includes('FACEBOOK') ? showFB() : null}
+        </div>
       </div>
     </div>
   );
