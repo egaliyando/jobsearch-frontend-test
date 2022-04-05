@@ -26,11 +26,19 @@ function JobDetail() {
     });
   };
 
-  useEffect(() => {
+  React.useEffect(() => {
+    let user = localStorage.getItem('user');
+    let token = JSON.parse(user);
+    if (!token) {
+      window.location.href = '/';
+    }
+
     const jobId = params.id;
 
     fetchJobById(jobId);
   }, []);
+
+  useEffect(() => {}, []);
 
   return (
     <>

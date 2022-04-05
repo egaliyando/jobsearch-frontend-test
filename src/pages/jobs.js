@@ -28,6 +28,14 @@ function Jobs() {
     dispatch(getJobs(params));
   };
 
+  React.useEffect(() => {
+    let user = localStorage.getItem('user');
+    let token = JSON.parse(user);
+    if (!token) {
+      window.location.href = '/';
+    }
+  }, []);
+
   const onLoadMore = () => {
     setPage(page + 1);
     axios

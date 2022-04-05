@@ -6,6 +6,7 @@ import Auth from './pages/auth';
 
 function App() {
   const typeOfLogin = ['GMAIL', 'FACEBOOK'];
+
   return (
     <BrowserRouter>
       <Routes>

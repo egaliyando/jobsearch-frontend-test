@@ -8,6 +8,14 @@ function Auth(props) {
   const text = props;
   const types = props.typeOfLogin;
 
+  React.useEffect(() => {
+    let user = localStorage.getItem('user');
+    let token = JSON.parse(user);
+    if (token) {
+      window.location.href = '/jobs';
+    }
+  }, []);
+
   const responseGoogle = (response) => {
     let data = {
       token: response.accessToken,
