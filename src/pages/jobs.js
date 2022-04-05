@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { put } from 'redux-saga/effects';
+import { put, takeLatest } from 'redux-saga/effects';
 
 import { getJobs } from '../redux/actions/jobs';
 import { useNavigate } from 'react-router-dom';
@@ -11,10 +11,15 @@ function Jobs() {
   const navigate = useNavigate();
 
   const datas = useSelector((state) => state.jobs);
+  console.log('datas');
+  console.log(datas);
   const [page, setPage] = useState(1);
   const [desc, setDesc] = useState('');
   const [location, setLocation] = useState('');
   const [isFulltime, setIsFulltime] = useState(false);
+  const [datalIsLimit, setDatalIsLimit] = useState(true);
+
+  console.log(datalIsLimit);
 
   const onSearch = () => {
     let params = {
@@ -24,6 +29,10 @@ function Jobs() {
     };
     dispatch(getJobs(params));
   };
+
+  // function* setAnotherProduct(data) {
+  //   yield put;
+  // }
 
   const onLoadMore = () => {
     setPage(page + 1);
@@ -40,15 +49,19 @@ function Jobs() {
         console.log('res load more');
         console.log(res);
         if (res.status === 200) {
+          setDatalIsLimit(true);
           let _temp = [];
           res.data.forEach((item) => {
             if (item?.id) {
               _temp.push(item);
             }
           });
-          put({ type: 'GET_JOBS_SUCCESS', jobs: _temp.concat(datas.jobs) });
+          dispatch({ type: 'GET_JOBS_SUCCESS', jobs: _temp.concat(datas.jobs) });
         }
-        // setDetail(res.data);
+      })
+      .catch((err) => {
+        console.log(err.response);
+        setDatalIsLimit(false);
       });
   };
 
@@ -132,9 +145,11 @@ function Jobs() {
         )}
       </div>
 
-      <button onClick={onLoadMore} className="w-full py-1 rounded-md bg-sky-600 font-semibold m-3 text-white">
-        Load More
-      </button>
+      {datalIsLimit && (
+        <button onClick={onLoadMore} className="w-full py-1 rounded-md bg-sky-600 font-semibold m-3 text-white">
+          Load More
+        </button>
+      )}
     </div>
   );
 }
