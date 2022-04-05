@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { put } from 'redux-saga/effects';
+
 import { getJobs } from '../redux/actions/jobs';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function Jobs() {
   const dispatch = useDispatch();
@@ -13,27 +16,51 @@ function Jobs() {
   const [location, setLocation] = useState('');
   const [isFulltime, setIsFulltime] = useState(false);
 
-  console.log('desc');
-  console.log(location);
-
   const onSearch = () => {
     let params = {
       description: desc,
       location: location,
-      full_time: true,
+      full_time: isFulltime,
     };
     dispatch(getJobs(params));
+  };
+
+  const onLoadMore = () => {
+    setPage(page + 1);
+    axios
+      .get(`http://dev3.dansmultipro.co.id/api/recruitment/positions.json`, {
+        params: {
+          description: desc,
+          location: location,
+          full_time: isFulltime,
+          page: page + 1,
+        },
+      })
+      .then((res) => {
+        console.log('res load more');
+        console.log(res);
+        if (res.status === 200) {
+          let _temp = [];
+          res.data.forEach((item) => {
+            if (item?.id) {
+              _temp.push(item);
+            }
+          });
+          put({ type: 'GET_JOBS_SUCCESS', jobs: _temp.concat(datas.jobs) });
+        }
+        // setDetail(res.data);
+      });
   };
 
   React.useEffect(() => {
     let params = {
       description: desc,
       location: location,
-      full_time: true,
+      full_time: isFulltime,
       page: page,
     };
     dispatch(getJobs(params));
-  }, [page, dispatch]);
+  }, [dispatch]);
 
   return (
     <div>
@@ -96,7 +123,7 @@ function Jobs() {
                 >
                   <p className="text-lg text-sky-600 font-semibold">{item?.title}</p>
                   <div className="flex text-gray-400">
-                    {item?.company} - <span className="font-semibold text-green-400">{item?.type}</span>
+                    {item?.company} - <span className="font-semibold ml-1 text-green-400">{item?.type}</span>
                   </div>
                 </div>
               );
@@ -105,7 +132,7 @@ function Jobs() {
         )}
       </div>
 
-      <button onClick={() => setPage(page + 1)} className="w-full bg-sky-600 font-semibold m-3 text-white">
+      <button onClick={onLoadMore} className="w-full py-1 rounded-md bg-sky-600 font-semibold m-3 text-white">
         Load More
       </button>
     </div>

@@ -10,7 +10,7 @@ const jobs = (state = initialState, action) => {
     case 'GET_JOBS_REQUESTED':
       return { ...state, loading: true };
     case 'GET_JOBS_SUCCESS':
-      return { ...state, loading: false, jobs: action.jobs.concat(state.jobs) };
+      return { ...state, loading: false, jobs: action.jobs };
     case 'GET_JOBS_FAILED':
       return { ...state, loading: false, error: action.message };
     case 'AXIOS_ARGS':
