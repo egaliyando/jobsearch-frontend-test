@@ -11,6 +11,7 @@ function Jobs() {
   const [page, setPage] = useState(1);
   const [desc, setDesc] = useState('');
   const [location, setLocation] = useState('');
+  const [isFulltime, setIsFulltime] = useState(false);
 
   console.log('desc');
   console.log(location);
@@ -20,7 +21,6 @@ function Jobs() {
       description: desc,
       location: location,
       full_time: true,
-      page: page,
     };
     dispatch(getJobs(params));
   };
@@ -66,7 +66,7 @@ function Jobs() {
           <p className="font-semibold opacity-0">-</p>
 
           <div className="flex items-center">
-            <input type="checkbox" />
+            <input type="checkbox" checked={isFulltime} onChange={(e) => setIsFulltime(e.target.checked)} />
             <p className="font-semibold ml-2">Full Time Only</p>
           </div>
         </div>
@@ -90,7 +90,7 @@ function Jobs() {
             if (item?.id) {
               return (
                 <div
-                  // onClick={() => navigate(`${item?.id}`)}
+                  onClick={() => navigate(`${item?.id}`)}
                   className="border-b cursor-pointer border-gray-600 py-4"
                   key={item?.id}
                 >
